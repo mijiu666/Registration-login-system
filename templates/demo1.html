@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        {#body{text-align:center}#}
+        .div1{
+            width: 1400px;    height: 30px;    background: #E5E5E5;    text-align: center;    line-height: 30px;    font-size: 14px;
+        }
+    </style>
+
+</head>
+<body>
+
+<form action="/register/" method="post" id="form">
+    <div class="div1">
+    <p style="color: #5897fb">注册页面</p>
+    <p><input type="text" name="username" id="username" placeholder="用户名" onkeyup="re_test(NAME_RE,'username')"><span></span></p>
+    <p><input type="password" name="passwd" id="passwd" placeholder="密码" onkeyup="re_test(PASSWD_RE,'passwd')"><span></span></p>
+    <p><input type="password" name="passwd" id="re_passwd" placeholder="密码" onkeyup="passwd_two()"><span></span></p>
+    性别:<p><input type="radio" name="sex" class="sex" value="1" checked>男</p>
+    <p><input type="radio" name="sex" class="sex" value="2">女</p>
+    <p>生日<input type="date" name="date" id="birthday" onchange="re_test(BIR_RE,'birthday')"></p>
+    <p><input type="email" name="email" id="email" placeholder="邮箱" onkeyup="re_test(EMAIL_RE,'email')"><span></span></p>
+    <p>手机:<input type="number" name="phone" id="phone" placeholder="手机" onkeyup="re_test(PHONE_RE,'phone')"><span></span></p>
+     {% csrf_token %}
+    <p><input type="button" id="button" onclick="submitData()" value="提交"></input><span></span></p>
+    </div>
+</form>
+
+<script>
+    const NAME_RE = /\w{2,10}/;
+    const PASSWD_RE = /\w{6,20}/;
+    const BIR_RE = /\w+/;
+    const EMAIL_RE = /\w+@\w+\.com/;
+    const PHONE_RE = /^1\d{10}/;
+
+    function re_test(RE,idName) {
+        let elementOBJ = document.getElementById(idName);
+        // trim方法 去除前后的空格
+        let relult = elementOBJ.value.trim();
+        if (RE.test(relult)) {
+            elementOBJ.nextElementSibling.innerHTML = "<font color='#7FFF00' size='3'>&nbsp&nbsp√</font>";
+            return true
+        }else {
+            elementOBJ.nextElementSibling.innerHTML = "<font color='#DC143C' size='3'>&nbsp&nbspx</font>";
+            return false
+        }
+    }
+
+    function submitData() {
+        let elementOBJ = document.getElementById('button');
+        if (re_test(NAME_RE,'username') && re_test(PASSWD_RE,'passwd') && re_test(EMAIL_RE,'email') && re_test(PHONE_RE,'phone') && passwd_two()){
+
+            let form = document.getElementById('form');
+            form.submit();
+            alert("提交成功!");
+            return true
+        }else {
+            alert("提交失败!");
+            return false
+        }
+
+    }
+
+    function passwd_two() {
+
+        let passwd_a = document.getElementById("passwd");
+        let passwd_b = document.getElementById("re_passwd");
+
+        if (passwd_a.value === passwd_b.value){
+            passwd_b.nextElementSibling.innerHTML = "<font color='#adff2f' size='3'>&nbsp&nbsp验证成功!</font>";
+            return true
+        }else {
+            passwd_b.nextElementSibling.innerHTML = "<font color='#adff2f' size='3'>&nbsp&nbsp两次密码不一致!</font>";
+            return false
+        }
+    }
+    // function testname() {
+    //     let name = document.getElementById("name").value.trim();
+    //     // trim方法 去除前后的空格
+    //     if (NAME_RE.test(name)) {
+    //         alert("成功")
+    //         return true
+    //     }
+    // }
+</script>
+
+</body>
+</html>
